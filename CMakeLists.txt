@@ -23,6 +23,7 @@ qt_add_qml_module(appCurrencyConverter
         Assets/default.json
         SOURCES CurrencyEntry.h CurrencyEntry.cpp
         SOURCES CurrencyListModel.h CurrencyListModel.cpp
+        RESOURCES Assets/Roboto.ttf
 )
 
 

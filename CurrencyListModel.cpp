@@ -2,12 +2,13 @@
 
 #include <QFile>
 #include <QJsonObject>
+#include <algorithm>
 
 CurrencyListModel::CurrencyListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     m_manager = new QNetworkAccessManager(this);
-    fetchFromNetwork();
+    update();
 }
 
 int CurrencyListModel::rowCount(const QModelIndex &parent) const
@@ -52,9 +53,18 @@ QHash<int, QByteArray> CurrencyListModel::roleNames() const
     return roles;
 }
 
+void CurrencyListModel::update()
+{
+#ifdef LOCAL
+    populateFromLocalFile();
+#else
+    fetchFromNetwork();
+#endif
+}
+
 void CurrencyListModel::populateFromLocalFile()
 {
-    QFile file("../Assets/default.json");
+    QFile file(":/qt/qml/CurrencyConverter/Assets/default.json");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         qDebug() << "Failed to open local json file";
@@ -85,27 +95,21 @@ void CurrencyListModel::parseJson(const QJsonDocument &doc)
 
     QStringList keys = valuteObject.keys();
     beginResetModel();
+    m_entries.clear();
     for (const QString &key : keys) {
         QJsonObject currencyObject = valuteObject.value(key).toObject();
 
-        QString id = currencyObject.value("ID").toString();
+        // QString id = currencyObject.value("ID").toString();
         // QString numCode = currencyObject.value("NumCode").toString();
         QString charCode = currencyObject.value("CharCode").toString();
-        int nominal = currencyObject.value("Nominal").toInt();
+        // int nominal = currencyObject.value("Nominal").toInt();
         QString name = currencyObject.value("Name").toString();
         double value = currencyObject.value("Value").toDouble();
-        double previous = currencyObject.value("Previous").toDouble();
-
+        // double previous = currencyObject.value("Previous").toDouble();
         m_entries.append(new CurrencyEntry(name, charCode, value, this));
-
-        // qDebug() << "Валюта:" << name;
-        // qDebug() << "ID:" << id;
-        // qDebug() << "Код валюты:" << charCode;
-        // qDebug() << "Номинал:" << nominal;
-        // qDebug() << "Текущая стоимость:" << value;
-        // qDebug() << "Предыдущая стоимость:" << previous;
-        // qDebug() << "--------------------------";
     }
+    m_entries.append(new CurrencyEntry("Российский рубль", "RUB", 1.00, this));
+    std::sort(m_entries.begin(), m_entries.end(), [](const CurrencyEntry* const lhs, const CurrencyEntry*  const rhs){return lhs->charCode() < rhs->charCode();});
     endResetModel();
 }
 
@@ -114,10 +118,9 @@ void CurrencyListModel::OnNetworkRequestFinished(QNetworkReply *reply)
     if (reply->error() != QNetworkReply::NoError)
     {
         qDebug() << reply->errorString();
-        qDebug() << "falling back to local file..";
+        qDebug() << "network error, falling back to local file..";
         populateFromLocalFile();
         return;
     }
-    qDebug() << "all fine!";
     parseJson(QJsonDocument::fromJson(reply->readAll()));
 }

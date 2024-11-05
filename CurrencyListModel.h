@@ -7,7 +7,7 @@
 
 #include "CurrencyEntry.h"
 
-// #define LOCAL
+#define LOCAL
 
 class CurrencyListModel : public QAbstractListModel
 {
@@ -26,9 +26,10 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QHash<int, QByteArray> roleNames() const override;
 public:
-    Q_INVOKABLE void fetchFromNetwork();
+    Q_INVOKABLE void update();
     Q_INVOKABLE double calculate(int firstValuteIndex, int secondValuteIndex, double value);
 private:
+    void fetchFromNetwork();
     void populateFromLocalFile();
     void parseJson(const QJsonDocument& doc);
     void OnNetworkRequestFinished(QNetworkReply *reply);
