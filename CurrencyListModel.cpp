@@ -38,6 +38,8 @@ QVariant CurrencyListModel::data(const QModelIndex &index, int role) const
         return QString("%1 - %2").arg(m_entries.at(row)->charCode()).arg(m_entries.at(row)->value());
     case Index:
         return row;
+    case ImageSource:
+        return QString("Assets/%1.svg").arg(m_entries.at(row)->charCode());
     }
 
     return QVariant();
@@ -50,6 +52,7 @@ QHash<int, QByteArray> CurrencyListModel::roleNames() const
     roles[ValueRole] = "value";
     roles[FullInfo] = "fullInfo";
     roles[Index] = "index";
+    roles[ImageSource] = "imageSource";
     return roles;
 }
 

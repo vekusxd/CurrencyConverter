@@ -18,12 +18,59 @@ qt_add_qml_module(appCurrencyConverter
     VERSION 1.0
     QML_FILES
         Main.qml
+        Converter.qml
+        CurrenclyListModelDelegate.qml
     RESOURCES
-        Assets/ru.svg
         Assets/default.json
-        SOURCES CurrencyEntry.h CurrencyEntry.cpp
-        SOURCES CurrencyListModel.h CurrencyListModel.cpp
-        RESOURCES Assets/Roboto.ttf
+        Assets/Roboto.ttf
+        Assets/AED.svg
+        Assets/AMD.svg
+        Assets/AUD.svg
+        Assets/AZN.svg
+        Assets/BGN.svg
+        Assets/BRL.svg
+        Assets/BYN.svg
+        Assets/CAD.svg
+        Assets/CHF.svg
+        Assets/CNY.svg
+        Assets/CZK.svg
+        Assets/DKK.svg
+        Assets/EGP.svg
+        Assets/EUR.svg
+        Assets/GBP.svg
+        Assets/GEL.svg
+        Assets/HKD.svg
+        Assets/HUF.svg
+        Assets/IDR.svg
+        Assets/INR.svg
+        Assets/JPY.svg
+        Assets/KGS.svg
+        Assets/KRW.svg
+        Assets/KZT.svg
+        Assets/MDL.svg
+        Assets/NOK.svg
+        Assets/NZD.svg
+        Assets/PLN.svg
+        Assets/QAR.svg
+        Assets/RON.svg
+        Assets/RSD.svg
+        Assets/RUB.svg
+        Assets/SEK.svg
+        Assets/SGD.svg
+        Assets/THB.svg
+        Assets/TJS.svg
+        Assets/TMT.svg
+        Assets/TRY.svg
+        Assets/UAH.svg
+        Assets/USD.svg
+        Assets/UZS.svg
+        Assets/VND.svg
+        Assets/XDR.svg
+        Assets/ZAR.svg
+    SOURCES
+        CurrencyEntry.h CurrencyEntry.cpp
+        CurrencyListModel.h CurrencyListModel.cpp
+
 )
 
 
