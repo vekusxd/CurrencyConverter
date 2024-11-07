@@ -20,6 +20,7 @@ qt_add_qml_module(appCurrencyConverter
         Main.qml
         Converter.qml
         CurrenclyListModelDelegate.qml
+        CurrencyTextField.qml
     RESOURCES
         Assets/default.json
         Assets/Roboto.ttf
@@ -70,7 +71,8 @@ qt_add_qml_module(appCurrencyConverter
     SOURCES
         CurrencyEntry.h CurrencyEntry.cpp
         CurrencyListModel.h CurrencyListModel.cpp
-
+        RESOURCES Assets/swap_icon.svg
+        RESOURCES Assets/appIcon.svg
 )
 
 

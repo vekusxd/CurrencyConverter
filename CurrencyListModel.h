@@ -28,8 +28,13 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 public:
     Q_INVOKABLE void update();
-    Q_INVOKABLE double calculate(int firstValuteIndex, int secondValuteIndex, double value);
+    Q_INVOKABLE QString calculate(int firstValuteIndex, int secondValuteIndex, double value) const;
+    Q_INVOKABLE QString getCharCode(int index) const;
+    Q_INVOKABLE QString getImageSource(int index) const;
+    Q_INVOKABLE QString getCurrency(int firstValuteIndex, int secondValuteIndex) const;
+    Q_INVOKABLE QString getName(int index) const;
 private:
+    QString roundDouble(double value) const;
     void fetchFromNetwork();
     void populateFromLocalFile();
     void parseJson(const QJsonDocument& doc);

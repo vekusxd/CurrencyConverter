@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 #endif
 
     QQmlApplicationEngine engine;
-
+    app.setWindowIcon(QIcon(":/qt/qml/CurrencyConverter/Assets/appIcon.svg"));
     SetDefaultFont();
 
     qmlRegisterType<CurrencyListModel>("CurrencyModel", 1, 0,"CurrencyModel");

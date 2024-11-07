@@ -17,6 +17,11 @@ Window {
 
     color: "#eef2f8"
 
+    MouseArea {
+        anchors.fill: parent
+        onClicked: forceActiveFocus()
+    }
+
     ColumnLayout {
         id: rootLayout
         width: parent.width
@@ -30,6 +35,7 @@ Window {
             Layout.fillWidth: true
             Layout.preferredHeight: parent.height * (1 / 10)
             text: "Currency converter"
+            // text: "Конвертер валют"
             horizontalAlignment: Text.AlignHCenter
             color: "#1F2261"
             font {
@@ -57,6 +63,9 @@ Window {
             Layout.preferredWidth: parent.width - 40
             Layout.alignment: Qt.AlignHCenter
             Layout.preferredHeight: parent.height * (5 / 8)
+            onChangeButtonText: text => {
+                                    display.text = text
+                                }
         }
 
         Text {
@@ -70,9 +79,10 @@ Window {
         }
 
         Text {
+            id: display
             Layout.fillWidth: true
             Layout.preferredHeight: parent.height * (1 / 9)
-            text: "1 SGD = 0.7367 USD"
+            text: ""
             Layout.leftMargin: 20
             color: "black"
             font {
@@ -80,7 +90,5 @@ Window {
                 bold: true
             }
         }
-
-
     }
 }
