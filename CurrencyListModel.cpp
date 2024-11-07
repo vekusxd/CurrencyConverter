@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QJsonObject>
 #include <algorithm>
+#include <qeventloop.h>
 #include <sstream>
 #include <iomanip>
 
@@ -10,7 +11,7 @@ CurrencyListModel::CurrencyListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
     m_manager = new QNetworkAccessManager(this);
-    update();
+    init();
 }
 
 int CurrencyListModel::rowCount(const QModelIndex &parent) const
@@ -114,6 +115,28 @@ QString CurrencyListModel::getCurrency(int firstValuteIndex, int secondValuteInd
 QString CurrencyListModel::getName(int index) const
 {
     return m_entries.at(index)->name();
+}
+
+void CurrencyListModel::init()
+{
+    QEventLoop loop;
+    QNetworkRequest request;
+    request.setUrl(QUrl("https://www.cbr-xml-daily.ru/daily_json.js"));
+    auto reply = m_manager->get(request);
+    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+    //read from reply, or you can call the class slot / any class function here
+    if (reply->error() != QNetworkReply::NoError)
+    {
+        qDebug() << reply->errorString();
+        qDebug() << "network error, falling back to local file..";
+        populateFromLocalFile();
+    }
+    else
+    {
+        parseJson(QJsonDocument::fromJson(reply->readAll()));
+    }
+    reply->deleteLater();
 }
 
 QString CurrencyListModel::roundDouble(double value) const

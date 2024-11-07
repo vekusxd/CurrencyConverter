@@ -34,6 +34,7 @@ public:
     Q_INVOKABLE QString getCurrency(int firstValuteIndex, int secondValuteIndex) const;
     Q_INVOKABLE QString getName(int index) const;
 private:
+    void init();
     QString roundDouble(double value) const;
     void fetchFromNetwork();
     void populateFromLocalFile();

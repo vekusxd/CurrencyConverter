@@ -11,69 +11,87 @@ Rectangle {
     property int toolTipDelay: 750
     signal changeButtonText(string newText)
 
+    CurrencyModel {
+        id: currencyModel
+    }
+
     ColumnLayout {
         anchors.fill: parent
+
         RowLayout {
             Layout.topMargin: 20
-            ComboBox {
-                id: comboBox1
-                model: currencyModel
-                textRole: "fullInfo"
-                Layout.leftMargin: 20
-                currentIndex: 31 //ruble index
-                onCurrentIndexChanged: {
-                    var firstValuteCharCode = model.getCharCode(currentIndex)
-                    var secondValuteCharCode = comboBox2.model.getCharCode(
-                                comboBox2.currentIndex)
-                    var result = model.getCurrency(comboBox1.currentIndex,
-                                                   comboBox2.currentIndex)
-                    changeButtonText("1 %1 = %2 %3".arg(
-                                         firstValuteCharCode).arg(
-                                         secondValuteCharCode).arg(result))
-                }
 
-                // ToolTip.text: model.getName(currentIndex)
-                // ToolTip.delay: toolTipDelay
-                // hoverEnabled: true
-                // ToolTip.visible: hovered
-                background: Rectangle {
-                    color: "transparent"
-                    border.width: 0
+            ColumnLayout {
+                spacing: 10
+                Text {
+                    text: "Amount         "
+                    Layout.leftMargin: 20
+                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    color: "#989898"
+                    font.pixelSize: 15
                 }
-                delegate: CurrenclyListModelDelegate {
-                    toolTipDelay: root.toolTipDelay
-                }
-                contentItem: RowLayout {
-                    Image {
-                        id: icon1
-                        source: comboBox1.model.getImageSource(
-                                    comboBox1.currentIndex)
-                        sourceSize: Qt.size(
-                                        img1.sourceSize.width / root.iconScale,
-                                        img1.sourceSize.height / root.iconScale)
-                        // base qml stuff i guess :)
-                        // https://forum.qt.io/topic/52161/properly-scaling-svg-images/2
-                        Image {
-                            id: img1
-                            source: parent.source
-                            width: 0
-                            height: 0
-                        }
+                ComboBox {
+                    id: comboBox1
+                    model: currencyModel
+                    textRole: "fullInfo"
+                    Layout.leftMargin: 20
+                    currentIndex: 31 //ruble index
+                    onCurrentIndexChanged: {
+                        var firstValuteCharCode = model.getCharCode(
+                                    currentIndex)
+                        var secondValuteCharCode = comboBox2.model.getCharCode(
+                                    comboBox2.currentIndex)
+                        var result = model.getCurrency(comboBox1.currentIndex,
+                                                       comboBox2.currentIndex)
+                        changeButtonText("1 %1 = %2 %3".arg(
+                                             firstValuteCharCode).arg(
+                                             secondValuteCharCode).arg(result))
                     }
 
-                    Text {
-                        text: comboBox1.model.getCharCode(
-                                  comboBox1.currentIndex)
-                        color: "#26278D"
-                        font {
-                            pixelSize: 20
-                            bold: true
+                    // ToolTip.text: model.getName(currentIndex)
+                    // ToolTip.delay: toolTipDelay
+                    // hoverEnabled: true
+                    // ToolTip.visible: hovered
+                    background: Rectangle {
+                        color: "transparent"
+                        border.width: 0
+                    }
+                    delegate: CurrenclyListModelDelegate {
+                        toolTipDelay: root.toolTipDelay
+                    }
+                    contentItem: RowLayout {
+                        Image {
+                            id: icon1
+                            source: comboBox1.model.getImageSource(
+                                        comboBox1.currentIndex)
+                            sourceSize: Qt.size(
+                                            img1.sourceSize.width / root.iconScale,
+                                            img1.sourceSize.height / root.iconScale)
+                            // base qml stuff i guess :)
+                            // https://forum.qt.io/topic/52161/properly-scaling-svg-images/2
+                            Image {
+                                id: img1
+                                source: parent.source
+                                width: 0
+                                height: 0
+                            }
+                        }
+
+                        Text {
+                            text: comboBox1.model.getCharCode(
+                                      comboBox1.currentIndex)
+                            color: "#26278D"
+                            font {
+                                pixelSize: 20
+                                bold: true
+                            }
                         }
                     }
                 }
             }
             CurrencyTextField {
                 id: textField1
+                Layout.topMargin: 20
                 Layout.preferredWidth: 130
                 Layout.preferredHeight: 40
 
@@ -102,7 +120,6 @@ Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: 40
             property int lineWidth: (width - 50) / 2
-            // Линия
             Rectangle {
                 height: 2
                 width: parent.lineWidth
@@ -150,84 +167,84 @@ Rectangle {
 
         RowLayout {
             Layout.bottomMargin: 20
-            ComboBox {
-                id: comboBox2
-                model: currencyModel
-                textRole: "fullInfo"
-                currentIndex: 39 //usd index
-                Layout.leftMargin: 20
-                background: Rectangle {
-                    color: "transparent"
-                    border.width: 0
+            ColumnLayout {
+                spacing: 10
+                Text {
+                    text: "Converted Amount"
+                    Layout.leftMargin: 20
+                    Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    color: "#989898"
+                    font.pixelSize: 15
+                    wrapMode: Text.Wrap
                 }
-                onCurrentIndexChanged: {
-                    let firstValuteCharCode = comboBox1.model.getCharCode(
-                            comboBox1.currentIndex)
-                    let secondValuteCharCode = model.getCharCode(currentIndex)
-                    let result = model.getCurrency(comboBox1.currentIndex,
-                                                   comboBox2.currentIndex)
-                    changeButtonText("1 %1 = %2 %3".arg(
-                                         firstValuteCharCode).arg(
-                                         secondValuteCharCode).arg(result))
-                }
-
-                // ToolTip.text: model.getName(currentIndex)
-                // ToolTip.delay: 1000
-                // hoverEnabled: true
-                // ToolTip.visible: hovered
-                Component.onCompleted: currentIndexChanged()
-
-                delegate: CurrenclyListModelDelegate {
-                    toolTipDelay: root.toolTipDelay
-                }
-                contentItem: RowLayout {
-                    Image {
-                        id: icon2
-                        source: comboBox1.model.getImageSource(
-                                    comboBox2.currentIndex)
-                        sourceSize: Qt.size(
-                                        img2.sourceSize.width / root.iconScale,
-                                        img2.sourceSize.height / root.iconScale)
-                        // base qml stuff i guess :
-                        // https://forum.qt.io/topic/52161/properly-scaling-svg-images/2
-                        Image {
-                            id: img2
-                            source: parent.source
-                            width: 0
-                            height: 0
-                        }
+                ComboBox {
+                    id: comboBox2
+                    model: currencyModel
+                    textRole: "fullInfo"
+                    currentIndex: 39 //usd index
+                    Layout.leftMargin: 20
+                    background: Rectangle {
+                        color: "transparent"
+                        border.width: 0
+                    }
+                    onCurrentIndexChanged: {
+                        let firstValuteCharCode = comboBox1.model.getCharCode(
+                                comboBox1.currentIndex)
+                        let secondValuteCharCode = model.getCharCode(
+                                currentIndex)
+                        let result = model.getCurrency(comboBox1.currentIndex,
+                                                       comboBox2.currentIndex)
+                        changeButtonText("1 %1 = %2 %3".arg(
+                                             firstValuteCharCode).arg(
+                                             secondValuteCharCode).arg(result))
                     }
 
-                    Text {
-                        text: comboBox2.model.getCharCode(
-                                  comboBox2.currentIndex)
-                        color: "#26278D"
-                        font {
-                            pixelSize: 20
-                            bold: true
+                    // ToolTip.text: model.getName(currentIndex)
+                    // ToolTip.delay: 1000
+                    // hoverEnabled: true
+                    // ToolTip.visible: hovered
+                    Component.onCompleted: currentIndexChanged()
+                    delegate: CurrenclyListModelDelegate {
+                        toolTipDelay: root.toolTipDelay
+                    }
+                    contentItem: RowLayout {
+                        Image {
+                            id: icon2
+                            source: comboBox1.model.getImageSource(
+                                        comboBox2.currentIndex)
+                            sourceSize: Qt.size(
+                                            img2.sourceSize.width / root.iconScale,
+                                            img2.sourceSize.height / root.iconScale)
+                            // base qml stuff i guess :
+                            // https://forum.qt.io/topic/52161/properly-scaling-svg-images/2
+                            Image {
+                                id: img2
+                                source: parent.source
+                                width: 0
+                                height: 0
+                            }
+                        }
+
+                        Text {
+                            text: comboBox2.model.getCharCode(
+                                      comboBox2.currentIndex)
+                            color: "#26278D"
+                            font {
+                                pixelSize: 20
+                                bold: true
+                            }
                         }
                     }
                 }
             }
+
             CurrencyTextField {
+                Layout.topMargin: 20
                 id: textField2
                 Layout.preferredWidth: 130
                 Layout.preferredHeight: 40
                 readOnly: true
             }
         }
-
-        // // Button {
-        // //     text: "Update"
-        // //     onClicked: {
-        // //         currencyModel.update()
-        // //     }
-        // // }
-        // Button {
-        //     text: "Convert"
-        // }
-    }
-    CurrencyModel {
-        id: currencyModel
     }
 }
